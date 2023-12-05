@@ -1,21 +1,31 @@
 #include <PS4Controller.h>
 
-//servo
+////////servo
 #include <ESP32Servo.h>
-
 Servo myservo;  // create servo object to control a servo
-// 16 servo objects can be created on the ESP32
 
 int pos = 0;    // variable to store the servo position
 // Recommended PWM GPIO pins on the ESP32 include 2,4,12-19,21-23,25-27,32-33
-int servoPin = 13;
+int servoPin = 25;
 int val = 0;
 
+////////servo
+
+#define interr 2
+///// ultra
+
+#define trigPin 4
+#define echoPin 5
+#define bip 13
+
+float duration;
+float distance;
+
+bool pressed = false;
+
+
+////////motor
 int pinMotor = 12;
-
-//servo
-
-//motor
 int vel = 0;
 int pinInputMotor1 = 32;
 int pinInputMotor2 = 33;
@@ -69,47 +79,8 @@ void onDisConnect()
   Serial.println("Disconnected!.");
 }
 
-
-
-void setup()
-{
-  Serial.begin(115200);
-  PS4.attach(notify);
-  PS4.attachOnConnect(onConnect);
-  PS4.attachOnDisconnect(onDisConnect);
-  PS4.begin();
-  Serial.println("Ready.");
-
-  //servo
-  // Allow allocation of all timers
-  ESP32PWM::allocateTimer(0);
-  ESP32PWM::allocateTimer(1);
-  ESP32PWM::allocateTimer(2);
-  ESP32PWM::allocateTimer(3);
-  myservo.setPeriodHertz(50);    // standard 50 hz servo
-  myservo.attach(servoPin, 500, 2400); // attaches the servo on pin 18 to the servo object
-  // using default min/max of 1000us and 2000us
-  // different servos may require different min/max settings
-  // for an accurate 0 to 180 sweep
-  //servo
-
-  //motor
-  pinMode ( pinMotor, OUTPUT ) ;
-  pinMode ( pinInputMotor1, OUTPUT ) ;
-  pinMode ( pinInputMotor2, OUTPUT ) ;
-  //motor
-}
-int speed = 250;
-void loop() {
-
-  //Serial.println(PS4.LStickX());
-
-  val = map(PS4.RStickX(), -128, 128, 0, 180);
-  Serial.println(val);
-  myservo.write(va6l);
-  delay(15);
-
-  //motor
+void motorDc(){
+  
   if(PS4.LStickY() < 0)
   {
     digitalWrite(pinInputMotor1, HIGH);
@@ -123,21 +94,95 @@ void loop() {
   
   vel = PS4.LStickY() > 0 ? PS4.LStickY() : PS4.LStickY() * (-1);
   vel = map(vel, 0,128,0,255);
-  analogWrite ( pinMotor, vel ) ;
-  //Serial.println(vel);
+  analogWrite ( pinMotor, vel ) ; 
+
+  
+  }
+
+
+  void blink() {
+     Serial.println("entrou");
+     
+  }
+
+  
+   void servoM(){
+  
+  val = map(PS4.RStickX(), -128, 128, 150, 50);
+  myservo.write(val);
+  //delay(15);
+  
+  }
+
+void setup()
+{
+  
+  /////ultra
+ 
+  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+  pinMode(echoPin, INPUT); // Sets the echoPin as an Input
+  pinMode(bip, OUTPUT);
+
+  
+  Serial.begin(115200);
+  //PS4.attach(notify);
+  PS4.attachOnConnect(onConnect);
+  PS4.attachOnDisconnect(onDisConnect);
+  PS4.begin();
+  Serial.println("Ready.");
+
+  //servo
+  myservo.setPeriodHertz(50);    // standard 50 hz servo
+  myservo.attach(servoPin, 500, 2400); // attaches the servo on pin 18 to the servo object
+  // using default min/max of 1000us and 2000us
+  // different servos may require different min/max settings
+  // for an accurate 0 to 180 sweep
+  //servo
+
+  //motor
+  pinMode ( pinMotor, OUTPUT ) ;
+  pinMode ( pinInputMotor1, OUTPUT ) ;
+  pinMode ( pinInputMotor2, OUTPUT ) ;
   //motor
 
-  /*
-    //servo
-    for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
-    // in steps of 1 degree
-    myservo.write(pos);    // tell servo to go to position in variable 'pos'
-    delay(15);             // waits 15ms for the servo to reach the position
+
+   pinMode(interr, OUTPUT);
+   attachInterrupt(digitalPinToInterrupt(interr), blink, RISING);
+}
+//int speed = 250;
+void loop() {
+  servoM();
+  motorDc();
+  
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  // Reads the echoPin, returns the sound wave travel time in microsecondduration = pulseIn(echoPin, HIGH);
+  duration = pulseIn(echoPin, HIGH);
+  // Calculating the distance
+  distance = duration * 0.034 / 2;
+  // Prints the distance on the Serial Monitor
+  //Serial.print("Distance: ");
+  //Serial.println(distance);
+  //delay(100);
+  Serial.println();
+  if (PS4.Cross() == 1) {
+      pressed = !pressed;
     }
-    for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
-    myservo.write(pos);    // tell servo to go to position in variable 'pos'
-    delay(15);             // waits 15ms for the servo to reach the position
-    //servo
+  if (pressed){
+      digitalWrite(interr, HIGH);
     }
-  */
+  else{
+    digitalWrite(interr, LOW);
+    }
+  
+    
+    
+  
+  //digitalWrite(bip, HIGH);
+
+  
 }
