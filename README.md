@@ -1,6 +1,6 @@
-# ESP32 PS4 Controlled Car
+# Heltec 32 Lora V2 PS4 Controlled Car
 
-This code implements a control system using an ESP32 microcontroller to interact with a PS4 controller, manage a servo motor, ultrasonic sensor, and a DC motor.
+This code implements a control system using an Heltec 32 Lora V2 microcontroller to interact with a PS4 controller, manage a servo motor, ultrasonic sensor, and a DC motor.
 
 ## Components
 
@@ -32,7 +32,7 @@ This code implements a control system using an ESP32 microcontroller to interact
 
 ## Usage
 
-1. Connect the PS4 controller via Bluetooth or USB to the ESP32.
+1. Connect the PS4 controller via Bluetooth or USB to the Heltec 32 Lora V2.
 2. Connect the servo motor, ultrasonic sensor, DC motor, and buzzer to their respective GPIO pins as specified in the code.
 3. Upload the code to the ESP32 board using the Arduino IDE or a compatible platform.
 4. Monitor the serial output for status updates and interaction information.
@@ -41,3 +41,4 @@ This code implements a control system using an ESP32 microcontroller to interact
 
 - Ensure proper wiring and connection of components to avoid malfunctions.
 - Adjust pin configurations if necessary, depending on the actual hardware setup.
+- It works with ESP32 aswell, but you just have to change the pins.
