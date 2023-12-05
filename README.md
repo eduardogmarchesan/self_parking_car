@@ -34,7 +34,7 @@ This code implements a control system using an Heltec 32 Lora V2 microcontroller
 
 1. Connect the PS4 controller via Bluetooth or USB to the Heltec 32 Lora V2.
 2. Connect the servo motor, ultrasonic sensor, DC motor, and buzzer to their respective GPIO pins as specified in the code.
-3. Upload the code to the ESP32 board using the Arduino IDE or a compatible platform.
+3. Upload the code to the Heltec 32 Lora V2 board using the Arduino IDE or a compatible platform.
 4. Monitor the serial output for status updates and interaction information.
 
 ## Notes
