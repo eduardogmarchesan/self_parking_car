@@ -1,4 +1,4 @@
-# ESP32 PS4 Controller Control System
+# ESP32 PS4 Controlled Car
 
 This code implements a control system using an ESP32 microcontroller to interact with a PS4 controller, manage a servo motor, ultrasonic sensor, and a DC motor.
 
